@@ -224,7 +224,7 @@ std::string ScreenCapture::createFilename(uint64_t frameNumber) {
     }
     std::string bufferString(Buffer.begin(), Buffer.end());
 
-    return std::format("{}{}.png", file, bufferString);
+    return std::format("{}{}.png", file.string(), bufferString);
 }
 
 int ScreenCapture::availableCaptureThread() {
