@@ -1,3 +1,7 @@
+This is a clone of the repository https://github.com/sgct/sgct/ which contains code modified to build with MacOS, test builds using github actions.
+
+----------------------------------
+
 # SGCT - Simple Graphics Cluster Toolkit
 
 ![Build Status](http://dev.openspaceproject.com/buildStatus/icon?job=SGCT%2Fsgct%2Fmaster&style=flat-square)
