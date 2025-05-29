@@ -23,18 +23,18 @@ jobs:
     - name: Install dependencies
       # https://docs.openspaceproject.com/releases-v0.20/contribute/development/compiling/ubuntu.html
       run: |
-        brew install glew boost freeimage mpv vulkan-headers vulkan-loader brotli gdal qt@6 fmt
-        echo "check path of fmt/format.h"
-        ls $(brew --prefix)/include/fmt/format.h
-        echo "all of include"
-        ls $(brew --prefix)/include
-        echo "all of fmt"
-        ls $(brew --prefix)/include/fmt
+        brew install glew boost freeimage mpv vulkan-headers vulkan-loader brotli gdal qt@6
+        
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
+        export CC="$(brew --prefix llvm@15)/bin/clang"
+        export CXX="$(brew --prefix llvm@15)/bin/clang++"
+        export PATH="$(brew --prefix llvm@15)/bin:$PATH"
+        export LDFLAGS="-L$(brew --prefix llvm@15)/lib"
+        export CPPFLAGS="-I$(brew --prefix llvm@15)/include"
         cmake -G Xcode -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_CXX_STANDARD=20 -B ${{github.workspace}}/build 
 
     - name: Build
