@@ -458,7 +458,7 @@ struct SGCT_EXPORT Cluster {
     std::optional<GeneratorVersion> generator;
     std::optional<Meta> meta;
 
-    auto operator<=>(const Cluster&) const noexcept = default;
+    auto operator<=>(const Cluster&) const noexcept = delete;
 };
 SGCT_EXPORT void validateCluster(const Cluster& cluster);
 
