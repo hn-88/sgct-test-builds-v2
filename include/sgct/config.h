@@ -436,7 +436,15 @@ struct SGCT_EXPORT Meta {
     std::optional<std::string> name;
     std::optional<std::string> version;
 
-    auto operator<=>(const Meta&) const noexcept = default;
+    bool operator==(const Meta& other) const noexcept {
+        return std::tie(author, description, license, name, version) ==
+               std::tie(other.author, other.description, other.license, other.name, other.version);
+    }
+
+    std::strong_ordering operator<=>(const Meta& other) const noexcept {
+        return std::tie(author, description, license, name, version) <=>
+               std::tie(other.author, other.description, other.license, other.name, other.version);
+    }
 };
 
 
@@ -458,7 +466,13 @@ struct SGCT_EXPORT Cluster {
     std::optional<GeneratorVersion> generator;
     std::optional<Meta> meta;
 
-    inline bool operator==(const Cluster& lhs, const Cluster& rhs) {
+    friend SGCT_EXPORT bool operator==(const Cluster& lhs, const Cluster& rhs);
+    friend SGCT_EXPORT bool operator<(const Cluster& lhs, const Cluster& rhs);
+    friend SGCT_EXPORTbool operator>(const Cluster& lhs, const Cluster& rhs);
+
+    
+};
+SGCT_EXPORT bool operator==(const Cluster& lhs, const Cluster& rhs) {
         return lhs.success == rhs.success &&
                lhs.masterAddress == rhs.masterAddress &&
                lhs.debugLog == rhs.debugLog &&
@@ -474,7 +488,7 @@ struct SGCT_EXPORT Cluster {
                lhs.meta == rhs.meta;
     }
     
-    inline bool operator<(const Cluster& lhs, const Cluster& rhs) {
+    SGCT_EXPORT bool operator<(const Cluster& lhs, const Cluster& rhs) {
         return std::tie(lhs.success, lhs.masterAddress, lhs.debugLog, lhs.threadAffinity,
                         lhs.firmSync, lhs.scene, lhs.nodes, lhs.users, lhs.capture,
                         lhs.trackers, lhs.settings, lhs.generator, lhs.meta)
@@ -483,7 +497,7 @@ struct SGCT_EXPORT Cluster {
                         rhs.trackers, rhs.settings, rhs.generator, rhs.meta);
     }
 
-    inline bool operator>(const Cluster& lhs, const Cluster& rhs) {
+    SGCT_EXPORT bool operator>(const Cluster& lhs, const Cluster& rhs) {
         return std::tie(lhs.success, lhs.masterAddress, lhs.debugLog, lhs.threadAffinity,
                         lhs.firmSync, lhs.scene, lhs.nodes, lhs.users, lhs.capture,
                         lhs.trackers, lhs.settings, lhs.generator, lhs.meta)
@@ -491,7 +505,6 @@ struct SGCT_EXPORT Cluster {
                         rhs.firmSync, rhs.scene, rhs.nodes, rhs.users, rhs.capture,
                         rhs.trackers, rhs.settings, rhs.generator, rhs.meta);
     }
-};
 SGCT_EXPORT void validateCluster(const Cluster& cluster);
 
 } // namespace sgct::config
