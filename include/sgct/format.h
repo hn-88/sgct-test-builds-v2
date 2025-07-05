@@ -9,10 +9,10 @@
 #ifndef __SGCT__FMT__H__
 #define __SGCT__FMT__H__
 
-#ifndef __APPLE__
-
 #include <filesystem>
 #include <fmt/core.h>
+
+#ifndef __APPLE__
 
 template <>
 struct fmt::formatter<std::filesystem::path> {
