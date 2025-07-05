@@ -185,6 +185,7 @@ find_package(scn REQUIRED)
 find_package(Stb REQUIRED)
 find_package(tinyxml2 REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(fmt REQUIRED)
 
 if (SGCT_TRACY_SUPPORT)
   find_package(Threads REQUIRED) # Needed by Tracy
@@ -209,6 +210,7 @@ target_link_libraries(sgct
     $<$<BOOL:${SGCT_OPENVR_SUPPORT}>:openvr>
     $<$<BOOL:${SGCT_SPOUT_SUPPORT}>:spout>
     $<$<BOOL:${SGCT_TRACY_SUPPORT}>:Tracy::TracyClient>
+    fmt::fmt
   PRIVATE
     ZLIB::ZLIB
     minizip::minizip
