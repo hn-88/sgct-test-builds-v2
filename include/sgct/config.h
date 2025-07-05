@@ -16,6 +16,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <fmt/core.h>
 
 namespace sgct::config {
 
