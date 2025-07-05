@@ -458,7 +458,39 @@ struct SGCT_EXPORT Cluster {
     std::optional<GeneratorVersion> generator;
     std::optional<Meta> meta;
 
-    auto operator<=>(const Cluster&) const noexcept = delete;
+    inline bool operator==(const Cluster& lhs, const Cluster& rhs) {
+        return lhs.success == rhs.success &&
+               lhs.masterAddress == rhs.masterAddress &&
+               lhs.debugLog == rhs.debugLog &&
+               lhs.threadAffinity == rhs.threadAffinity &&
+               lhs.firmSync == rhs.firmSync &&
+               lhs.scene == rhs.scene &&
+               lhs.nodes == rhs.nodes &&
+               lhs.users == rhs.users &&
+               lhs.capture == rhs.capture &&
+               lhs.trackers == rhs.trackers &&
+               lhs.settings == rhs.settings &&
+               lhs.generator == rhs.generator &&
+               lhs.meta == rhs.meta;
+    }
+    
+    inline bool operator<(const Cluster& lhs, const Cluster& rhs) {
+        return std::tie(lhs.success, lhs.masterAddress, lhs.debugLog, lhs.threadAffinity,
+                        lhs.firmSync, lhs.scene, lhs.nodes, lhs.users, lhs.capture,
+                        lhs.trackers, lhs.settings, lhs.generator, lhs.meta)
+             < std::tie(rhs.success, rhs.masterAddress, rhs.debugLog, rhs.threadAffinity,
+                        rhs.firmSync, rhs.scene, rhs.nodes, rhs.users, rhs.capture,
+                        rhs.trackers, rhs.settings, rhs.generator, rhs.meta);
+    }
+
+    inline bool operator>(const Cluster& lhs, const Cluster& rhs) {
+        return std::tie(lhs.success, lhs.masterAddress, lhs.debugLog, lhs.threadAffinity,
+                        lhs.firmSync, lhs.scene, lhs.nodes, lhs.users, lhs.capture,
+                        lhs.trackers, lhs.settings, lhs.generator, lhs.meta)
+             > std::tie(rhs.success, rhs.masterAddress, rhs.debugLog, rhs.threadAffinity,
+                        rhs.firmSync, rhs.scene, rhs.nodes, rhs.users, rhs.capture,
+                        rhs.trackers, rhs.settings, rhs.generator, rhs.meta);
+    }
 };
 SGCT_EXPORT void validateCluster(const Cluster& cluster);
 
