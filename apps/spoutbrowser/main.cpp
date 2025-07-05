@@ -12,7 +12,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <format>
+#include <fmt/core.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -97,7 +97,7 @@ bool bindSpout() {
     }
     const bool creationSuccess = receiver->CreateReceiver(name.data(), width, height);
     if (!isInitialized && creationSuccess) {
-        Log::Info(std::format(
+        Log::Info(fmt::format(
             "Spout: Initializing {}x{} texture from '{}'", width, height, name.data()
         ));
         isInitialized = true;
@@ -192,12 +192,12 @@ void draw2D(const RenderData& data) {
         const Sender& sender = senders[i];
         std::string text;
         if (i == currentSender) {
-            text = std::format(
+            text = fmt::format(
                 FormatSelected, i, sender.name, sender.width, sender.height
             );
         }
         else {
-            text = std::format(
+            text = fmt::format(
                 Format, i, sender.name, sender.width, sender.height
             );
         }

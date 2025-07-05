@@ -32,7 +32,7 @@ namespace {
             }
         }(img.channels());
 
-        sgct::Log::Debug(std::format(
+        sgct::Log::Debug(fmt::format(
             "Creating texture. Size: {}x{}, {}-channels, Type: {:#04x}, Format: {:#04x}",
             img.size().x, img.size().y, img.channels(), type, internalFormat
         ));
@@ -143,7 +143,7 @@ unsigned int TextureManager::loadTexture(const std::filesystem::path& filename,
         anisotropicFilterSize,
         mipmapLevels
     );
-    Log::Debug(std::format("Texture created from '{}' [id={}]", filename.string(), t));
+    Log::Debug(fmt::format("Texture created from '{}' [id={}]", filename.string(), t));
     return t;
 }
 

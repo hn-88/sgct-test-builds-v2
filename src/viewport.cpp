@@ -57,7 +57,7 @@ Viewport::Viewport(const config::Viewport& viewport, const Window& parent)
         User* user = ClusterManager::instance().user(*viewport.user);
         if (!user) {
             Log::Warning(
-                std::format("Could not find user with name '{}'", *viewport.user)
+                fmt::format("Could not find user with name '{}'", *viewport.user)
             );
         }
 

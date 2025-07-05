@@ -254,7 +254,7 @@ void CorrectionMesh::loadMesh(const std::filesystem::path& path, BaseViewport& p
 
     _warpGeometry = CorrectionMeshGeometry(buf);
 
-    Log::Debug(std::format(
+    Log::Debug(fmt::format(
         "CorrectionMesh read successfully. Vertices={}, Indices={}",
         buf.vertices.size(), buf.indices.size()
     ));

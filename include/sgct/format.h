@@ -10,16 +10,16 @@
 #define __SGCT__FMT__H__
 
 #include <filesystem>
-#include <format>
+#include <fmt/core.h>
 
 template <>
-struct std::formatter<std::filesystem::path> {
-    constexpr auto parse(std::format_parse_context& ctx) {
+struct fmt::formatter<std::filesystem::path> {
+    constexpr auto parse(fmt::format_parse_context& ctx) {
         return ctx.begin();
     }
 
-    auto format(const std::filesystem::path& path, std::format_context& ctx) const {
-        return std::format_to(ctx.out(), "{}", path.string());
+    auto format(const std::filesystem::path& path, fmt::format_context& ctx) const {
+        return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };
 

@@ -193,15 +193,15 @@ config::Cluster loadCluster(std::optional<std::filesystem::path> path) {
     if (path) {
         assert(std::filesystem::exists(*path) && std::filesystem::is_regular_file(*path));
         try {
-            Log::Debug(std::format("Parsing config '{}'", path->string()));
+            Log::Debug(fmt::format("Parsing config '{}'", path->string()));
             config::Cluster cluster = readConfig(*path);
 
             Log::Debug("Config file read successfully");
-            Log::Info(std::format("Number of nodes: {}", cluster.nodes.size()));
+            Log::Info(fmt::format("Number of nodes: {}", cluster.nodes.size()));
 
             for (size_t i = 0; i < cluster.nodes.size(); i++) {
                 const config::Node& node = cluster.nodes[i];
-                Log::Info(std::format(
+                Log::Info(fmt::format(
                     "\tNode ({}) address: {} [{}]", i, node.address, node.port
                 ));
             }
@@ -278,7 +278,7 @@ Engine::Engine(config::Cluster cluster, Callbacks callbacks, const Configuration
         ZoneScopedN("GLFW initialization");
         glfwSetErrorCallback(
             [](int error, const char* desc) {
-                throw Err(3010, std::format("GLFW error ({}): {}", error, desc));
+                throw Err(3010, fmt::format("GLFW error ({}): {}", error, desc));
             }
         );
         const int res = glfwInit();
@@ -287,7 +287,7 @@ Engine::Engine(config::Cluster cluster, Callbacks callbacks, const Configuration
         }
     }
 
-    Log::Info(std::format("SGCT version: {}", Version));
+    Log::Info(fmt::format("SGCT version: {}", Version));
 
     Log::Debug("Validating cluster configuration");
     config::validateCluster(cluster);
@@ -311,7 +311,7 @@ Engine::Engine(config::Cluster cluster, Callbacks callbacks, const Configuration
         for (size_t i = 0; i < cluster.nodes.size(); i++) {
             if (NetworkManager::instance().matchesAddress(cluster.nodes[i].address)) {
                 clusterId = static_cast<int>(i);
-                Log::Debug(std::format("Running in cluster mode as node {}", i));
+                Log::Debug(fmt::format("Running in cluster mode as node {}", i));
                 break;
             }
         }
@@ -325,7 +325,7 @@ Engine::Engine(config::Cluster cluster, Callbacks callbacks, const Configuration
                 );
             }
             clusterId = *config.nodeId;
-            Log::Debug(std::format("Running locally as node {}", clusterId));
+            Log::Debug(fmt::format("Running locally as node {}", clusterId));
         }
         else {
             throw Err(3002, "When running locally, a node ID needs to be specified");
@@ -373,7 +373,7 @@ void Engine::initialize() {
         glfwDestroyWindow(offscreen);
         glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
     }
-    Log::Info(std::format("Detected OpenGL version: {}.{}", major, minor));
+    Log::Info(fmt::format("Detected OpenGL version: {}.{}", major, minor));
 
     initWindows(major, minor);
 
@@ -472,12 +472,12 @@ void Engine::initialize() {
         glfwGetWindowAttrib(winHandle, GLFW_CONTEXT_VERSION_MINOR),
         glfwGetWindowAttrib(winHandle, GLFW_CONTEXT_REVISION)
     };
-    Log::Info(std::format("OpenGL version {}.{}.{} core profile", v[0], v[1], v[2]));
+    Log::Info(fmt::format("OpenGL version {}.{}.{} core profile", v[0], v[1], v[2]));
 
     std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-    Log::Info(std::format("Vendor: {}", vendor));
+    Log::Info(fmt::format("Vendor: {}", vendor));
     std::string renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
-    Log::Info(std::format("Renderer: {}", renderer));
+    Log::Info(fmt::format("Renderer: {}", renderer));
 
     Window::makeSharedContextCurrent();
 
@@ -627,7 +627,7 @@ void Engine::initWindows(int majorVersion, int minorVersion) {
         int minor = 0;
         int release = 0;
         glfwGetVersion(&major, &minor, &release);
-        Log::Info(std::format("Using GLFW version {}.{}.{}", major, minor, release));
+        Log::Info(fmt::format("Using GLFW version {}.{}.{}", major, minor, release));
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, majorVersion);
@@ -717,7 +717,7 @@ void Engine::frameLockPreStage() {
         // more than a second
         const Network& c = nm.syncConnection(0);
         if (_settings.printSyncMessage && !c.isUpdated()) {
-            Log::Info(std::format(
+            Log::Info(fmt::format(
                 "Waiting for master. frame send {} != recv {}\n\tSwap groups: {}\n\t"
                 "Swap barrier: {}\n\tUniversal frame number: {}\n\tSGCT frame number: {}",
                 c.sendFrameCurrent(), c.recvFramePrevious(),
@@ -730,7 +730,7 @@ void Engine::frameLockPreStage() {
         if (glfwGetTime() - t0 > _settings.syncTimeout) {
             throw Err(
                 3004,
-                std::format("No sync signal from master for {} s", _settings.syncTimeout)
+                fmt::format("No sync signal from master for {} s", _settings.syncTimeout)
             );
         }
     }
@@ -763,7 +763,7 @@ void Engine::frameLockPostStage() {
         // more than a second
         for (int i = 0; i < nm.syncConnectionsCount(); i++) {
             if (_settings.printSyncMessage && !nm.connection(i).isUpdated()) {
-                Log::Info(std::format(
+                Log::Info(fmt::format(
                     "Waiting for IG {}: send frame {} != recv frame {}\n\tSwap groups: {}"
                     "\n\tSwap barrier: {}\n\tUniversal frame number: {}\n\t"
                     "SGCT frame number: {}", i, nm.connection(i).sendFrameCurrent(),
@@ -778,7 +778,7 @@ void Engine::frameLockPostStage() {
         if (glfwGetTime() - t0 > _settings.syncTimeout) {
             throw Err(
                 3005,
-                std::format("No sync signal from clients for {} s", _settings.syncTimeout)
+                fmt::format("No sync signal from clients for {} s", _settings.syncTimeout)
             );
         }
     }
