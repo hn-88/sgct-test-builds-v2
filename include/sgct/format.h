@@ -9,6 +9,8 @@
 #ifndef __SGCT__FMT__H__
 #define __SGCT__FMT__H__
 
+#ifndef __APPLE__
+
 #include <filesystem>
 #include <fmt/core.h>
 
@@ -22,5 +24,7 @@ struct fmt::formatter<std::filesystem::path> {
         return fmt::format_to(ctx.out(), "{}", path.string());
     }
 };
+
+#endif // not APPLE
 
 #endif // __SGCT__FMT__H__
